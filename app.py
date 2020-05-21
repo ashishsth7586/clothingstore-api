@@ -2,6 +2,7 @@ from flask import Flask, jsonify
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 from marshmallow import ValidationError
+from ma import ma
 
 from resources.user import UserRegister, UserLogin, UserLogout, TokenRefresh
 from blacklist import BLACKLIST
@@ -113,7 +114,7 @@ def revoked_token_callback():
 
 if __name__ == '__main__':
     from database import db
-    from ma import ma
+
     global db
     db.init_app(app)
     ma.init_app(app)

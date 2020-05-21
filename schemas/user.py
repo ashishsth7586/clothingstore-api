@@ -5,7 +5,7 @@ from marshmallow_sqlalchemy import ModelSchema
 class UserRegisterSchema(ModelSchema):
     class Meta:
         model = UserModel
-        load_only = ('password',)   # returning password is vulnerable
+        load_only = ('password', 'created_at')   # returning password is vulnerable
         dump_only = ('id',)         # ID is automatically added to each user.
 
 

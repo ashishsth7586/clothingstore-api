@@ -15,7 +15,7 @@ class UserModel(db.Model):
     email = db.Column(db.String(80), nullable=False, unique=True)
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
-    db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     def set_password(self):
         self.password = generate_password_hash(self.password, method='sha256')
