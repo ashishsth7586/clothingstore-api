@@ -5,6 +5,7 @@ from marshmallow import ValidationError
 from ma import ma
 
 from resources.user import UserRegister, UserLogin, UserLogout, TokenRefresh
+from resources.product import ProductList, Product
 from blacklist import BLACKLIST
 
 app = Flask(__name__)
@@ -20,10 +21,14 @@ app.secret_key = 'key-1~@#$#%@#ashish'  # app.config['JWT_SECRET_KEY]
 api = Api(app)
 
 # API Endpoints
+# Authentication Endpoints
 api.add_resource(UserRegister, '/register')
 api.add_resource(UserLogin, '/login')
 api.add_resource(UserLogout, '/logout')
 api.add_resource(TokenRefresh, '/token/refresh')
+# Products Endpoints
+api.add_resource(ProductList, '/products')
+api.add_resource(Product, '/product/<string:name>')
 
 
 @app.before_first_request
