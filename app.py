@@ -1,22 +1,25 @@
+import os
+
 from flask import Flask, jsonify
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 from marshmallow import ValidationError
-from ma import ma
 
+from ma import ma
+from resources.confirmation import Confirmation, ConfirmationByUser
 from resources.user import UserRegister, UserLogin, UserLogout, TokenRefresh
 from resources.product import ProductList, Product
 from blacklist import BLACKLIST
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['PROPAGATE_EXCEPTIONS'] = True
 app.config['JWT_BLACKLIST_ENABLED'] = True
 app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access', 'refresh']
 
-app.secret_key = 'key-1~@#$#%@#ashish'  # app.config['JWT_SECRET_KEY]
+app.secret_key = os.environ.get("APP_SECRET_KEY")  # app.config['JWT_SECRET_KEY]
 
 api = Api(app)
 
@@ -29,6 +32,9 @@ api.add_resource(TokenRefresh, '/token/refresh')
 # Products Endpoints
 api.add_resource(ProductList, '/products')
 api.add_resource(Product, '/product/<string:name>')
+# Confirmation Email
+api.add_resource(Confirmation, '/user_confirmation/<string:confirmation_id>')
+api.add_resource(ConfirmationByUser, "/confirmation/user/<int:user_id>")
 
 
 @app.before_first_request
@@ -123,4 +129,4 @@ if __name__ == '__main__':
     global db
     db.init_app(app)
     ma.init_app(app)
-    app.run(port=4000, debug=True)
+    app.run(host='127.0.0.1', port=4000, debug=True)
